@@ -14,6 +14,12 @@
         "categories": {
             "auth": {
                 "pytrackampd65e75a5": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d33v7qnm4jkspp",
+                    "type": "manual"
+                }
             }
         }
     }
