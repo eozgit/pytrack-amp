@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-pytrackamp-dev-163322-authRole",
+            "UnauthRoleArn": "arn:aws:iam::011676873200:role/amplify-pytrackamp-dev-163322-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::011676873200:role/amplify-pytrackamp-dev-163322-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-pytrackamp-dev-163322-deployment",
+            "UnauthRoleName": "amplify-pytrackamp-dev-163322-unauthRole",
+            "StackName": "amplify-pytrackamp-dev-163322",
+            "StackId": "arn:aws:cloudformation:us-east-1:011676873200:stack/amplify-pytrackamp-dev-163322/8e8e6330-af1d-11ea-9308-0a140a53308d",
+            "AmplifyAppId": "d33v7qnm4jkspp"
+        }
+    }
+}
