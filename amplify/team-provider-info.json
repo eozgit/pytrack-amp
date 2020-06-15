@@ -10,6 +10,11 @@
             "StackName": "amplify-pytrackamp-dev-163322",
             "StackId": "arn:aws:cloudformation:us-east-1:011676873200:stack/amplify-pytrackamp-dev-163322/8e8e6330-af1d-11ea-9308-0a140a53308d",
             "AmplifyAppId": "d33v7qnm4jkspp"
+        },
+        "categories": {
+            "auth": {
+                "pytrackampd65e75a5": {}
+            }
         }
     }
 }
