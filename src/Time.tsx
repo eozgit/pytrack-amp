@@ -11,7 +11,7 @@ export default (props: any) => {
 
         const data = await response.json();
 
-        setTime(JSON.stringify(data));
+        setTime(data.Output);
     }
 
     const getOptions = (): RequestInit => {
@@ -28,14 +28,16 @@ export default (props: any) => {
         }
     }
 
-    return <div>
+    return (
         <div>
-            <button onClick={getTime}>Get server time</button>
+            <div>
+                <button onClick={getTime}>Get server time</button>
+            </div>
+            <div>
+                <pre>
+                    {time}
+                </pre>
+            </div>
         </div>
-        <div>
-            <pre>
-                {time}
-            </pre>
-        </div>
-    </div>
+    );
 }
