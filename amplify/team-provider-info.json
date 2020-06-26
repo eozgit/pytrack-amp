@@ -22,5 +22,29 @@
                 }
             }
         }
+    },
+    "devc": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-pytrackamp-devc-211926-authRole",
+            "UnauthRoleArn": "arn:aws:iam::011676873200:role/amplify-pytrackamp-devc-211926-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::011676873200:role/amplify-pytrackamp-devc-211926-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-pytrackamp-devc-211926-deployment",
+            "UnauthRoleName": "amplify-pytrackamp-devc-211926-unauthRole",
+            "StackName": "amplify-pytrackamp-devc-211926",
+            "StackId": "arn:aws:cloudformation:us-east-1:011676873200:stack/amplify-pytrackamp-devc-211926/55b643e0-b7ea-11ea-868e-12305fa4f4bd",
+            "AmplifyAppId": "d2fnh1g6oyvxkt"
+        },
+        "categories": {
+            "auth": {
+                "pytrackampd65e75a5": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d2fnh1g6oyvxkt",
+                    "type": "manual"
+                }
+            }
+        }
     }
 }
