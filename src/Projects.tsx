@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import Page, { Grid, GridColumn } from '@atlaskit/page';
-import Project from './Project';
-import getRequestInit from './getRequestInit';
+import { fetchProjects } from './projectsSlice'
+import { RootState } from './rootReducer'
 
 export default (props: any) => {
 
-    const [projects, setProjects] = useState<Project[]>([]);
+    const projects = useSelector(
+        (state: RootState) => state.projects
+    )
 
-    const loadProjects = async () => {
-        const options = getRequestInit();
-
-        const response = await fetch('/pytrack-stage/api/projects', options);
-
-        const data = await response.json();
-
-        setProjects(data);
-    }
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        loadProjects();
+        (async () => dispatch(fetchProjects()))()
     }, []);
 
     return (
@@ -33,8 +28,8 @@ export default (props: any) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {projects.map(project => (
-                                <tr>
+                            {projects.list.map(project => (
+                                <tr key={`${project.name}-${project.description}`}>
                                     <td>{project.name}</td>
                                     <td>{project.description}</td>
                                 </tr>
