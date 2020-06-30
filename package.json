@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlaskit/button": "^13.4.2",
     "@atlaskit/css-reset": "^5.0.12",
+    "@atlaskit/form": "^7.4.1",
     "@atlaskit/page": "^11.0.14",
+    "@atlaskit/textarea": "^2.2.10",
+    "@atlaskit/textfield": "^3.1.13",
     "@aws-amplify/ui-react": "^0.2.8",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import Page, { Grid, GridColumn } from '@atlaskit/page';
-import { fetchProjects } from './projectsSlice'
+import { loadProjects } from './projectsSlice'
 import { RootState } from './rootReducer'
+import CreateProject from './CreateProject';
 
 export default (props: any) => {
 
@@ -13,7 +14,7 @@ export default (props: any) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        (async () => dispatch(fetchProjects()))()
+        (async () => dispatch(loadProjects()))()
     }, []);
 
     return (
@@ -29,7 +30,7 @@ export default (props: any) => {
                         </thead>
                         <tbody>
                             {projects.list.map(project => (
-                                <tr key={`${project.name}-${project.description}`}>
+                                <tr key={project.id}>
                                     <td>{project.name}</td>
                                     <td>{project.description}</td>
                                 </tr>
@@ -38,6 +39,7 @@ export default (props: any) => {
                     </table>
                 </GridColumn>
             </Grid>
+            <CreateProject></CreateProject>
         </Page>
     );
 }
