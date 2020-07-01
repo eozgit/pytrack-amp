@@ -43,7 +43,7 @@ export default (props: any) => {
                         </Field>
 
                         <FormFooter>
-                            <Button type="submit" appearance="primary">Submit</Button>
+                            <Button type="submit" appearance="primary">Create</Button>
                         </FormFooter>
                     </form>
                 )}

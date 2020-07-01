@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from './store'
 import Project from './Project'
-import { getProjects, postProject } from './api'
+import { getProjects, postProject, deleteProject } from './api'
 
-const initialState: { list: Project[] } = { list: [] }
+interface StateShape {
+    list: Project[],
+    idToDelete: number
+}
+
+const initialState: StateShape = { list: [], idToDelete: -1 }
 
 const projectsSlice = createSlice({
     name: 'projects',
@@ -11,13 +16,21 @@ const projectsSlice = createSlice({
     reducers: {
         setProjects(state, action: PayloadAction<Project[]>) {
             state.list = action.payload
+        },
+        setIdToDelete(state, action: PayloadAction<number>) {
+            state.idToDelete = action.payload
         }
     }
 })
 
-export const { setProjects } = projectsSlice.actions
+export const { setProjects, setIdToDelete } = projectsSlice.actions
 
 export default projectsSlice.reducer
+
+export const refreshPage = (): AppThunk => async dispatch => {
+    dispatch(loadProjects())
+    dispatch(setIdToDelete(-1))
+}
 
 export const loadProjects = (): AppThunk => async dispatch => {
     let projects: Project[] = []
@@ -36,5 +49,14 @@ export const createProject = (project: Project): AppThunk => async dispatch => {
     } catch (err) {
         console.error(err)
     }
-    dispatch(loadProjects())
+    dispatch(refreshPage())
+}
+
+export const removeProject = (id: number): AppThunk => async dispatch => {
+    try {
+        await deleteProject(id)
+    } catch (err) {
+        console.error(err)
+    }
+    dispatch(refreshPage())
 }
