@@ -27,7 +27,7 @@ export const { setProjects, setIdToDelete } = projectsSlice.actions
 
 export default projectsSlice.reducer
 
-export const refreshPage = (): AppThunk => async dispatch => {
+export const resetPage = (): AppThunk => async dispatch => {
     dispatch(loadProjects())
     dispatch(setIdToDelete(-1))
 }
@@ -49,7 +49,7 @@ export const createProject = (project: Project): AppThunk => async dispatch => {
     } catch (err) {
         console.error(err)
     }
-    dispatch(refreshPage())
+    dispatch(resetPage())
 }
 
 export const removeProject = (id: number): AppThunk => async dispatch => {
@@ -58,5 +58,5 @@ export const removeProject = (id: number): AppThunk => async dispatch => {
     } catch (err) {
         console.error(err)
     }
-    dispatch(refreshPage())
+    dispatch(resetPage())
 }
