@@ -4,7 +4,7 @@ import Button from '@atlaskit/button';
 import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
 
-import Form, { Field, FormFooter, } from '@atlaskit/form';
+import Form, { Field, FormFooter } from '@atlaskit/form';
 import { useDispatch } from 'react-redux';
 import { createProject } from './projectsSlice';
 import Project from './Project';

@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from './store'
 import Project from './Project'
-import { getProjects, postProject, deleteProject } from './api'
+import { getProjects, postProject, deleteProject, patchProject } from './api'
 
 interface StateShape {
     list: Project[],
-    idToDelete: number
+    idToDelete: number,
+    idToEdit: number
 }
 
-const initialState: StateShape = { list: [], idToDelete: -1 }
+const initialState: StateShape = { list: [], idToDelete: -1, idToEdit: -1 }
 
 const projectsSlice = createSlice({
     name: 'projects',
@@ -19,17 +20,21 @@ const projectsSlice = createSlice({
         },
         setIdToDelete(state, action: PayloadAction<number>) {
             state.idToDelete = action.payload
+        },
+        setIdToEdit(state, action: PayloadAction<number>) {
+            state.idToEdit = action.payload
         }
     }
 })
 
-export const { setProjects, setIdToDelete } = projectsSlice.actions
+export const { setProjects, setIdToDelete, setIdToEdit } = projectsSlice.actions
 
 export default projectsSlice.reducer
 
 export const resetPage = (): AppThunk => async dispatch => {
     dispatch(loadProjects())
     dispatch(setIdToDelete(-1))
+    dispatch(setIdToEdit(-1))
 }
 
 export const loadProjects = (): AppThunk => async dispatch => {
@@ -55,6 +60,15 @@ export const createProject = (project: Project): AppThunk => async dispatch => {
 export const removeProject = (id: number): AppThunk => async dispatch => {
     try {
         await deleteProject(id)
+    } catch (err) {
+        console.error(err)
+    }
+    dispatch(resetPage())
+}
+
+export const updateProject = (id: number, project: Project): AppThunk => async dispatch => {
+    try {
+        await patchProject(id, project)
     } catch (err) {
         console.error(err)
     }

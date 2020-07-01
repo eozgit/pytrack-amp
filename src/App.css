@@ -1,8 +1,8 @@
-.projects-table:hover .delete-project {
-  opacity: 100%;
+.projects-table:hover .opacity-10 {
+  opacity: 1;
 }
 
-.delete-project {
+.opacity-10 {
   cursor: pointer;
-  opacity: 10%;
+  opacity: 0.1;
 }
