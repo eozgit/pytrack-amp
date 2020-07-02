@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit';
 import ModalDialog, { ModalFooter, ModalTransition } from '@atlaskit/modal-dialog';
-import Form, { Field } from '@atlaskit/form';
+import Form, { Field, ErrorMessage } from '@atlaskit/form';
 import Button, { ButtonGroup } from '@atlaskit/button';
 import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
@@ -22,10 +22,21 @@ export default (props: any) => {
     const cancelEdit = () => dispatch(setIdToEdit(-1))
 
     const onFormSubmit = (data: any) => {
-        console.log(JSON.stringify(data));
         if (projectToEdit) {
             dispatch(updateProject(projectToEdit.id, data))
         }
+    }
+
+    const validateName = (value?: string) => {
+        if (!value) return 'REQUIRED'
+
+        if (value.length > 50) return 'TOO_LONG'
+    }
+
+    const validateDescription = (value?: string) => {
+        if (!value) return
+
+        if (value.length > 100) return 'TOO_LONG'
     }
 
     const footer = (props: any) => (
@@ -61,16 +72,31 @@ export default (props: any) => {
                     Footer: footer,
                 }}
             >
-                <Field name="name" defaultValue={projectToEdit.name} label="Name" isRequired>
-                    {({ fieldProps }) => <TextField {...fieldProps} />}
+                <Field name="name" defaultValue={projectToEdit.name} label="Name" isRequired validate={validateName}>
+                    {({ fieldProps, error }) => <Fragment>
+                        <TextField {...fieldProps} />
+                        {error === 'TOO_LONG' && (
+                            <ErrorMessage>
+                                Project name needs to be less than 50 characters
+                            </ErrorMessage>
+                        )}
+                    </Fragment>}
                 </Field>
 
                 <Field<string, HTMLTextAreaElement>
                     name="description"
                     defaultValue={projectToEdit.description}
                     label="Description"
+                    validate={validateDescription}
                 >
-                    {({ fieldProps }) => <TextArea minimumRows={4} {...fieldProps} />}
+                    {({ fieldProps, error }) => <Fragment>
+                        <TextArea minimumRows={4} {...fieldProps} />
+                        {error === 'TOO_LONG' && (
+                            <ErrorMessage>
+                                Description needs to be less than 100 characters
+                            </ErrorMessage>
+                        )}
+                    </Fragment>}
                 </Field>
             </ModalDialog>
         )}
