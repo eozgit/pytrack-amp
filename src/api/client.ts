@@ -26,3 +26,5 @@ export const postProject = (project: Project) => fetch(`${root}/projects`, { ...
 export const deleteProject = (id: number) => fetch(`${root}/projects/${id}`, { ...options, method: 'DELETE' })
 
 export const patchProject = (id: number, project: Project) => fetch(`${root}/projects/${id}`, { ...options, method: 'PATCH', body: JSON.stringify(project) })
+
+export const getIssues = (id: number) => fetch(`${root}/projects/${id}/issues`, options)
