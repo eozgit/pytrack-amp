@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from './store'
-import Project from './Project'
-import { getProjects, postProject, deleteProject, patchProject } from './api'
+import Project from '../model/Project'
+import { getProjects, postProject, deleteProject, patchProject } from '../api/client'
 
 interface StateShape {
     list: Project[],
     idToDelete: number,
-    idToEdit: number
+    idToEdit: number,
+    idForBoard: number
 }
 
-const initialState: StateShape = { list: [], idToDelete: -1, idToEdit: -1 }
+const initialState: StateShape = { list: [], idToDelete: -1, idToEdit: -1, idForBoard: -1 }
 
 const projectsSlice = createSlice({
     name: 'projects',
@@ -23,11 +24,14 @@ const projectsSlice = createSlice({
         },
         setIdToEdit(state, action: PayloadAction<number>) {
             state.idToEdit = action.payload
+        },
+        setIdForBoard(state, action: PayloadAction<number>) {
+            state.idForBoard = action.payload
         }
     }
 })
 
-export const { setProjects, setIdToDelete, setIdToEdit } = projectsSlice.actions
+export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard } = projectsSlice.actions
 
 export default projectsSlice.reducer
 

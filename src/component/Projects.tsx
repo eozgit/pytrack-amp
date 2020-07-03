@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import Page, { Grid, GridColumn } from '@atlaskit/page';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
 import EditFilledIcon from '@atlaskit/icon/glyph/edit-filled';
-import { resetPage, setIdToDelete, setIdToEdit } from './projectsSlice'
-import { RootState } from './rootReducer'
+import BoardIcon from '@atlaskit/icon/glyph/board';
+import { resetPage, setIdToDelete, setIdToEdit, setIdForBoard } from '../state/projectsSlice'
+import { RootState } from '../state/rootReducer'
 import CreateProject from './CreateProject';
 import DeleteProjectModal from './DeleteProjectModal';
 import EditProjectModal from './EditProjectModal';
@@ -30,8 +31,9 @@ export default (props: any) => {
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Delete</th>
-                                <th>Edit</th>
+                                <th className='icon-column'>Delete</th>
+                                <th className='icon-column'>Edit</th>
+                                <th className='icon-column'>Board</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,14 +41,19 @@ export default (props: any) => {
                                 <tr key={project.id} className='projects-table'>
                                     <td>{project.name}</td>
                                     <td>{project.description}</td>
-                                    <td>
+                                    <td className='icon-column'>
                                         <div className='opacity-10' onClick={e => dispatch(setIdToDelete(project.id))}>
                                             <TrashIcon size='medium' label='' />
                                         </div>
                                     </td>
-                                    <td>
+                                    <td className='icon-column'>
                                         <div className='opacity-10' onClick={e => dispatch(setIdToEdit(project.id))}>
                                             <EditFilledIcon size='medium' label='' />
+                                        </div>
+                                    </td>
+                                    <td className='icon-column'>
+                                        <div className='opacity-10' onClick={e => dispatch(setIdForBoard(project.id))}>
+                                            <BoardIcon size='medium' label='' />
                                         </div>
                                     </td>
                                 </tr>

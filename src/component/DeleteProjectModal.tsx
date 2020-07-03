@@ -2,8 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
-import { RootState } from './rootReducer'
-import { removeProject, setIdToDelete } from './projectsSlice'
+import { RootState } from '../state/rootReducer'
+import { removeProject, setIdToDelete } from '../state/projectsSlice'
 
 export default (props: any) => {
 

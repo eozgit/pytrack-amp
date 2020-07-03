@@ -1,7 +1,21 @@
-import getRequestInit from './getRequestInit'
-import Project from './Project';
+import Project from '../model/Project';
 
 const root = process.env.NODE_ENV === 'development' ? ' http://localhost:5000' : '/pytrack-stage/api'
+
+const getRequestInit = (): RequestInit => {
+    const key = Object.keys(window.localStorage).find(key =>
+        key.startsWith('CognitoIdentityServiceProvider.') &&
+        key.endsWith('.idToken')) || '';
+
+    const token = window.localStorage[key];
+
+    return {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+    };
+}
 
 const options = getRequestInit();
 

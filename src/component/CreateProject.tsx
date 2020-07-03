@@ -6,8 +6,8 @@ import TextArea from '@atlaskit/textarea';
 
 import Form, { Field, FormFooter, ErrorMessage } from '@atlaskit/form';
 import { useDispatch } from 'react-redux';
-import { createProject } from './projectsSlice';
-import Project from './Project';
+import { createProject } from '../state/projectsSlice';
+import Project from '../model/Project';
 
 export default (props: any) => {
 

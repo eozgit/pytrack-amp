@@ -6,8 +6,8 @@ import Form, { Field, ErrorMessage } from '@atlaskit/form';
 import Button, { ButtonGroup } from '@atlaskit/button';
 import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
-import { RootState } from './rootReducer'
-import { updateProject, setIdToEdit } from './projectsSlice'
+import { RootState } from '../state/rootReducer'
+import { updateProject, setIdToEdit } from '../state/projectsSlice'
 
 export default (props: any) => {
 
