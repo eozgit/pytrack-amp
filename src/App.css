@@ -11,3 +11,47 @@
   min-width: 45px;
   text-align: center;
 }
+
+.width-100 {
+  width: 100%;
+}
+
+.board-pane {
+  min-height: 500px;
+  display: flex;
+}
+
+.board-column {
+  margin: 5px;
+  border-radius: .2em;
+  background-color: whitesmoke;
+  width: 100%;
+}
+
+.board-column-heading {
+  margin: 10px;
+  color: lightslategray;
+  font-size: .9em;
+}
+
+.board-item {
+  margin: 5px;
+  border: thin solid gainsboro;
+  border-radius: .2em;
+  padding: 10px;
+  background-color: white;
+  height: 120px;
+}
+
+.board-item-description {
+  height: 53%
+}
+
+.board-item-footer {
+  display: flex;
+}
+
+.board-item-footer-element {
+  margin: 3px;
+  align-self: center;
+}

@@ -1,6 +1,16 @@
 import React, { useEffect } from 'react';
-import { RootState } from '../state/rootReducer';
 import { useSelector, useDispatch } from 'react-redux';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import Badge from '@atlaskit/badge';
+import Task16Icon from '@atlaskit/icon-object/glyph/task/16';
+import Bug16Icon from '@atlaskit/icon-object/glyph/bug/16';
+import Story16Icon from '@atlaskit/icon-object/glyph/story/16';
+import PriorityLowestIcon from '@atlaskit/icon-priority/glyph/priority-lowest';
+import PriorityLowIcon from '@atlaskit/icon-priority/glyph/priority-low';
+import PriorityMediumIcon from '@atlaskit/icon-priority/glyph/priority-medium';
+import PriorityHighIcon from '@atlaskit/icon-priority/glyph/priority-high';
+import PriorityHighestIcon from '@atlaskit/icon-priority/glyph/priority-highest';
+import { RootState } from '../state/rootReducer';
 import { loadIssues } from '../state/projectsSlice';
 
 export default (props: any) => {
@@ -17,30 +27,64 @@ export default (props: any) => {
         (async () => dispatch(loadIssues(idForBoard)))()
     }, []);
 
+    const dragEnd = (a: any, b: any) => console.log(a, b)
+
+    const columns = ['New', 'Develop', 'Test', 'Done']
+
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Assignee</th>
-                    <th>Storypoints</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                </tr>
-            </thead>
-            <tbody>
-                {issues.map(issue => <tr>
-                    <td>{issue.title}</td>
-                    <td>{issue.description}</td>
-                    <td>{issue.type}</td>
-                    <td>{issue.assignee}</td>
-                    <td>{issue.storypoints}</td>
-                    <td>{issue.status}</td>
-                    <td>{issue.priority}</td>
-                </tr>)}
-            </tbody>
-        </table>
+        <div>
+            <DragDropContext onDragEnd={dragEnd}>
+
+                <div className='board-pane'>
+                    {columns.map((column, columnIndex) => {
+
+                        const columnIssues = issues.filter(issue => issue.status === columnIndex)
+
+                        return (<Droppable droppableId={columnIndex.toString()}>
+                            {(provided, snapshot) => <div className='board-column'
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}>
+                                <div className='board-column-heading'><strong>{column.toUpperCase()}</strong> {columnIssues.length}</div>
+                                {
+
+                                    columnIssues.map((issue, issueIndex) =>
+                                        <Draggable key={issue.id} draggableId={issue.id.toString()} index={issue.index}>
+                                            {(provided, snapshot) => <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                className='board-item'>
+                                                <h6>{issue.title}</h6>
+                                                <p className='board-item-description'>{issue.description}</p>
+                                                <div className='board-item-footer'>
+                                                    <div className='board-item-footer-element'>
+                                                        {issue.type === 0 && <Task16Icon label='Task' />}
+                                                        {issue.type === 1 && <Bug16Icon label='Bug' />}
+                                                        {issue.type === 2 && <Story16Icon label='Story' />}
+                                                    </div>
+                                                    <div className='board-item-footer-element'>
+                                                        {issue.priority === 0 && <PriorityLowestIcon label='Lowest' />}
+                                                        {issue.priority === 1 && <PriorityLowIcon label='Low' />}
+                                                        {issue.priority === 2 && <PriorityMediumIcon label='Medium' />}
+                                                        {issue.priority === 3 && <PriorityHighIcon label='High' />}
+                                                        {issue.priority === 4 && <PriorityHighestIcon label='Highest' />}
+                                                    </div>
+                                                    <div className='board-item-footer-element'>
+                                                        <Badge>{issue.storypoints}</Badge>
+                                                    </div>
+                                                </div>
+                                            </div>}
+                                        </Draggable>
+                                    )
+
+                                }</div>}
+                        </Droppable>)
+                    }
+                    )
+                    }
+                </div>
+
+            </DragDropContext>
+        </div>
     )
 }
