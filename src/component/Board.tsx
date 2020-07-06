@@ -11,7 +11,7 @@ import PriorityMediumIcon from '@atlaskit/icon-priority/glyph/priority-medium';
 import PriorityHighIcon from '@atlaskit/icon-priority/glyph/priority-high';
 import PriorityHighestIcon from '@atlaskit/icon-priority/glyph/priority-highest';
 import { RootState } from '../state/rootReducer';
-import { loadIssues, setIssueIndices } from '../state/projectsSlice';
+import { loadIssues, moveIssue } from '../state/projectsSlice';
 import Issue from '../model/Issue';
 
 
@@ -30,8 +30,10 @@ export default (props: any) => {
     }, []);
 
     const dragEnd = (result: DropResult) => {
-        const { source, destination } = result
-        dispatch(setIssueIndices([source, destination]))
+        const { draggableId, source, destination } = result
+        if (destination) {
+            dispatch(moveIssue(idForBoard, +draggableId, source, destination))
+        }
     }
 
     const issueComparer = (issueA: Issue, issueB: Issue) => {

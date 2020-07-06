@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from './store'
 import Project from '../model/Project'
-import { getProjects, postProject, deleteProject, patchProject, getIssues } from '../api/client'
+import { getProjects, postProject, deleteProject, patchProject, getIssues, patchIssue } from '../api/client'
 import Issue from '../model/Issue'
 import { DraggableLocation } from 'react-beautiful-dnd'
 import setIndices from './setIndices'
@@ -101,3 +101,14 @@ export const loadIssues = (id: number): AppThunk => async dispatch => {
     }
     dispatch(setIssues(issues))
 }
+
+export const moveIssue = (projectId: number, issueId: number,
+    source: DraggableLocation, destination: DraggableLocation): AppThunk => async dispatch => {
+        dispatch(setIssueIndices([source, destination]))
+        try {
+            await patchIssue(projectId, issueId, { status: +destination.droppableId, index: destination.index, id: -1 })
+        } catch (err) {
+            console.error(err)
+        }
+        dispatch(loadIssues(projectId))
+    }
