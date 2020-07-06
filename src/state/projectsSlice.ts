@@ -3,6 +3,8 @@ import { AppThunk } from './store'
 import Project from '../model/Project'
 import { getProjects, postProject, deleteProject, patchProject, getIssues } from '../api/client'
 import Issue from '../model/Issue'
+import { DraggableLocation } from 'react-beautiful-dnd'
+import setIndices from './setIndices'
 
 interface StateShape {
     list: Project[],
@@ -32,11 +34,16 @@ const projectsSlice = createSlice({
         },
         setIssues(state, action: PayloadAction<Issue[]>) {
             state.issues = action.payload
+        },
+        setIssueIndices(state, action: PayloadAction<[DraggableLocation, DraggableLocation | undefined]>) {
+            const [source, destination] = action.payload
+            if (!destination) return
+            setIndices(state.issues, source, destination)
         }
     }
 })
 
-export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard, setIssues } = projectsSlice.actions
+export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard, setIssues, setIssueIndices } = projectsSlice.actions
 
 export default projectsSlice.reducer
 

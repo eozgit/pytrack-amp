@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import Badge from '@atlaskit/badge';
 import Task16Icon from '@atlaskit/icon-object/glyph/task/16';
 import Bug16Icon from '@atlaskit/icon-object/glyph/bug/16';
@@ -11,12 +11,14 @@ import PriorityMediumIcon from '@atlaskit/icon-priority/glyph/priority-medium';
 import PriorityHighIcon from '@atlaskit/icon-priority/glyph/priority-high';
 import PriorityHighestIcon from '@atlaskit/icon-priority/glyph/priority-highest';
 import { RootState } from '../state/rootReducer';
-import { loadIssues } from '../state/projectsSlice';
+import { loadIssues, setIssueIndices } from '../state/projectsSlice';
+import Issue from '../model/Issue';
+
+
+const idForBoardSelector = (state: RootState) => state.projects.idForBoard
+const issuesSelector = (state: RootState) => state.projects.issues
 
 export default (props: any) => {
-
-    const idForBoardSelector = (state: RootState) => state.projects.idForBoard
-    const issuesSelector = (state: RootState) => state.projects.issues
 
     const idForBoard = useSelector(idForBoardSelector)
     const issues = useSelector(issuesSelector)
@@ -27,10 +29,24 @@ export default (props: any) => {
         (async () => dispatch(loadIssues(idForBoard)))()
     }, []);
 
-    const dragEnd = (a: any, b: any) => console.log(a, b)
+    const dragEnd = (result: DropResult) => {
+        const { source, destination } = result
+        dispatch(setIssueIndices([source, destination]))
+    }
+
+    const issueComparer = (issueA: Issue, issueB: Issue) => {
+        const { index: indexA } = issueA
+        const { index: indexB } = issueB
+        if (indexA > indexB) {
+            return 1
+        } else if (indexA < indexB) {
+            return -1
+        } else {
+            return 0
+        }
+    }
 
     const columns = ['New', 'Develop', 'Test', 'Done']
-
     return (
         <div>
             <DragDropContext onDragEnd={dragEnd}>
@@ -38,9 +54,10 @@ export default (props: any) => {
                 <div className='board-pane'>
                     {columns.map((column, columnIndex) => {
 
-                        const columnIssues = issues.filter(issue => issue.status === columnIndex)
+                        let columnIssues = issues.filter(issue => issue.status === columnIndex)
+                        columnIssues.sort(issueComparer)
 
-                        return (<Droppable droppableId={columnIndex.toString()}>
+                        return (<Droppable droppableId={columnIndex.toString()} key={columnIndex}>
                             {(provided, snapshot) => <div className='board-column'
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}>
