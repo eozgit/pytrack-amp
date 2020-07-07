@@ -11,10 +11,11 @@ interface StateShape {
     idToDelete: number,
     idToEdit: number,
     idForBoard: number,
-    issues: Issue[]
+    issues: Issue[],
+    issue: Issue | null
 }
 
-const initialState: StateShape = { list: [], idToDelete: -1, idToEdit: -1, idForBoard: -1, issues: [] }
+const initialState: StateShape = { list: [], idToDelete: -1, idToEdit: -1, idForBoard: -1, issues: [], issue: null }
 
 const projectsSlice = createSlice({
     name: 'projects',
@@ -39,11 +40,14 @@ const projectsSlice = createSlice({
             const [source, destination] = action.payload
             if (!destination) return
             setIndices(state.issues, source, destination)
+        },
+        setIssueToEdit(state, action: PayloadAction<Issue | null>) {
+            state.issue = action.payload
         }
     }
 })
 
-export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard, setIssues, setIssueIndices } = projectsSlice.actions
+export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard, setIssues, setIssueIndices, setIssueToEdit } = projectsSlice.actions
 
 export default projectsSlice.reducer
 
@@ -100,6 +104,7 @@ export const loadIssues = (id: number): AppThunk => async dispatch => {
         console.error(err)
     }
     dispatch(setIssues(issues))
+    dispatch(setIdForBoard(id))
 }
 
 export const moveIssue = (projectId: number, issueId: number,
@@ -107,6 +112,16 @@ export const moveIssue = (projectId: number, issueId: number,
         dispatch(setIssueIndices([source, destination]))
         try {
             await patchIssue(projectId, issueId, { status: +destination.droppableId, index: destination.index, id: -1 })
+        } catch (err) {
+            console.error(err)
+        }
+        dispatch(loadIssues(projectId))
+    }
+
+export const updateIssue = (projectId: number, issueId: number,
+    patch: Issue): AppThunk => async dispatch => {
+        try {
+            await patchIssue(projectId, issueId, patch)
         } catch (err) {
             console.error(err)
         }

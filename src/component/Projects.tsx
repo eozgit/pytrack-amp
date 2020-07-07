@@ -4,7 +4,7 @@ import Page, { Grid, GridColumn } from '@atlaskit/page';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
 import EditFilledIcon from '@atlaskit/icon/glyph/edit-filled';
 import BoardIcon from '@atlaskit/icon/glyph/board';
-import { resetPage, setIdToDelete, setIdToEdit, setIdForBoard } from '../state/projectsSlice'
+import { resetPage, setIdToDelete, setIdToEdit, loadIssues } from '../state/projectsSlice'
 import { RootState } from '../state/rootReducer'
 import CreateProject from './CreateProject';
 import DeleteProjectModal from './DeleteProjectModal';
@@ -21,6 +21,10 @@ export default (props: any) => {
     useEffect(() => {
         (async () => dispatch(resetPage()))()
     }, []);
+
+    const goToBoard = (projectId: number) => {
+        dispatch(loadIssues(projectId))
+    }
 
     return (
         <Page>
@@ -52,7 +56,7 @@ export default (props: any) => {
                                         </div>
                                     </td>
                                     <td className='icon-column'>
-                                        <div className='opacity-10' onClick={e => dispatch(setIdForBoard(project.id))}>
+                                        <div className='opacity-10' onClick={e => goToBoard(project.id)}>
                                             <BoardIcon size='medium' label='' />
                                         </div>
                                     </td>

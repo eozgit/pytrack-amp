@@ -12,6 +12,7 @@
     "@atlaskit/icon-priority": "^6.0.0",
     "@atlaskit/modal-dialog": "^10.6.4",
     "@atlaskit/page": "^11.0.14",
+    "@atlaskit/select": "^12.0.0",
     "@atlaskit/textarea": "^2.2.10",
     "@atlaskit/textfield": "^3.1.13",
     "@atlaskit/tooltip": "^16.0.0",

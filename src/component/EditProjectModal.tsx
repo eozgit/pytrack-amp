@@ -8,6 +8,8 @@ import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
 import { RootState } from '../state/rootReducer'
 import { updateProject, setIdToEdit } from '../state/projectsSlice'
+import ContainerProps from '../shared/ContainerProps';
+import EditModalFooter from './EditModalFooter';
 
 export default (props: any) => {
 
@@ -39,25 +41,10 @@ export default (props: any) => {
         if (value.length > 100) return 'TOO_LONG'
     }
 
-    const footer = (props: any) => (
-        <ModalFooter>
-            <span></span>
-            <ButtonGroup>
-                <Button appearance="primary" type="submit">Update</Button>
-                <Button onClick={cancelEdit}>Cancel</Button>
-            </ButtonGroup>
-        </ModalFooter>
-    );
-
-    interface ContainerProps {
-        children: React.ReactNode;
-        className?: string;
-    }
-
     return (<ModalTransition>
         {projectToEdit && (
             <ModalDialog
-                heading="Update project"
+                heading="Edit project"
                 onClose={cancelEdit}
                 components={{
                     Container: ({ children, className }: ContainerProps) => (
@@ -69,7 +56,7 @@ export default (props: any) => {
                             )}
                         </Form>
                     ),
-                    Footer: footer,
+                    Footer: () => <EditModalFooter onCancel={cancelEdit}></EditModalFooter>,
                 }}
             >
                 <Field name="name" defaultValue={projectToEdit.name} label="Name" isRequired validate={validateName}>
