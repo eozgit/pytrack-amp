@@ -5,11 +5,11 @@ import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 import { RootState } from '../state/rootReducer'
 import { removeProject, setIdToDelete } from '../state/projectsSlice'
 
-export default (props: any) => {
+const projectsSelector = (state: RootState) => state.projects.list
+const idToDeleteSelector = (state: RootState) => state.projects.idToDelete
+const projectToDeleteSelector = createSelector([projectsSelector, idToDeleteSelector], (projects, id) => projects.find(p => p.id === id))
 
-    const projectsSelector = (state: RootState) => state.projects.list
-    const idToDeleteSelector = (state: RootState) => state.projects.idToDelete
-    const projectToDeleteSelector = createSelector([projectsSelector, idToDeleteSelector], (projects, id) => projects.find(p => p.id === id))
+export default (props: any) => {
 
     const projectToDelete = useSelector(projectToDeleteSelector)
 

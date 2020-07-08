@@ -6,13 +6,13 @@ import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
 import Select, { ValueType, OptionType } from '@atlaskit/select';
 import { RootState } from '../state/rootReducer';
-import { setIssueToEdit, updateIssue } from '../state/projectsSlice';
+import { setIssueToEdit, updateIssue, setIssueToDelete } from '../state/projectsSlice';
 import ContainerProps from '../shared/ContainerProps';
 import EditModalFooter from './EditModalFooter';
 import IssueTypeOptions from './form/IssueTypeOptions';
 import StorypointOptions from './form/StorypointOptions';
 import PriorityOptions from './form/PriorityOptions';
-import { IssueWithProperties } from '../model/Issue';
+import Issue, { IssueWithProperties } from '../model/Issue';
 
 const projectIdSelector = (state: RootState) => state.projects.idForBoard
 const issueSelector = (state: RootState) => state.projects.issue
@@ -25,6 +25,11 @@ export default (props: any) => {
     const dispatch = useDispatch()
 
     const cancelEdit = () => dispatch(setIssueToEdit(null))
+
+    const deleteIssue = (issue: Issue) => {
+        cancelEdit()
+        dispatch(setIssueToDelete(issue))
+    }
 
     const getIssueType = (type: number | undefined) => {
         if (!type) {
@@ -89,7 +94,7 @@ export default (props: any) => {
                             )}
                         </Form>
                     ),
-                    Footer: () => <EditModalFooter onCancel={cancelEdit}></EditModalFooter>,
+                    Footer: () => <EditModalFooter onCancel={cancelEdit} onDelete={() => deleteIssue(issue)}></EditModalFooter>,
                 }}
             >
                 <Field name="title" defaultValue={issue.title} label="Title" isRequired validate={validateTitle}>
@@ -152,23 +157,6 @@ export default (props: any) => {
                     </Fragment>
                     }
                 </Field>
-
-                {/* <Field<ValueType<OptionType>>
-                    name="status"
-                    defaultValue={getStatus(issue.status)}
-                    label="Status"
-                >
-                    {({ fieldProps: { id, ...rest }, error }) => <Fragment>
-                        <Select<OptionType>
-                            inputId={id}
-                            className="single-select"
-                            classNamePrefix="react-select"
-                            {...rest}
-                            options={StatusOptions}
-                        />
-                    </Fragment>
-                    }
-                </Field> */}
 
                 <Field<ValueType<OptionType>>
                     name="priority"

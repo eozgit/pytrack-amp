@@ -15,6 +15,7 @@ import { moveIssue, setIdForBoard, setIssues, setIssueToEdit } from '../state/pr
 import Issue, { IssueWithPosition } from '../model/Issue';
 import Page from '@atlaskit/page';
 import EditIssueModal from './EditIssueModal';
+import DeleteIssueModal from './DeleteIssueModal';
 
 
 const idForBoardSelector = (state: RootState) => state.projects.idForBoard
@@ -116,6 +117,7 @@ export default (props: any) => {
                 </DragDropContext>
             </div>
             <EditIssueModal></EditIssueModal>
+            <DeleteIssueModal></DeleteIssueModal>
         </Page>
     )
 }
