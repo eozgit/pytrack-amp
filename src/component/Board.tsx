@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import Badge from '@atlaskit/badge';
+import Button from '@atlaskit/button';
 import Task16Icon from '@atlaskit/icon-object/glyph/task/16';
 import Bug16Icon from '@atlaskit/icon-object/glyph/bug/16';
 import Story16Icon from '@atlaskit/icon-object/glyph/story/16';
@@ -11,19 +13,23 @@ import PriorityMediumIcon from '@atlaskit/icon-priority/glyph/priority-medium';
 import PriorityHighIcon from '@atlaskit/icon-priority/glyph/priority-high';
 import PriorityHighestIcon from '@atlaskit/icon-priority/glyph/priority-highest';
 import { RootState } from '../state/rootReducer';
-import { moveIssue, setIdForBoard, setIssues, setIssueToEdit } from '../state/projectsSlice';
+import { moveIssue, setIdForBoard, setIssues, setIssueToEdit, setCreateIssue } from '../state/projectsSlice';
 import Issue, { IssueWithPosition } from '../model/Issue';
 import Page from '@atlaskit/page';
 import EditIssueModal from './EditIssueModal';
 import DeleteIssueModal from './DeleteIssueModal';
+import CreateIssueModal from './CreateIssueModal';
 
 
 const idForBoardSelector = (state: RootState) => state.projects.idForBoard
+const projectsSelector = (state: RootState) => state.projects.list
 const issuesSelector = (state: RootState) => state.projects.issues
+const projectSelector = createSelector([projectsSelector, idForBoardSelector], (projects, id) => projects.find(p => p.id === id))
 
 export default (props: any) => {
 
-    const idForBoard = useSelector(idForBoardSelector)
+    const projectId = useSelector(idForBoardSelector)
+    const project = useSelector(projectSelector)
     const issues = useSelector(issuesSelector)
 
     const dispatch = useDispatch()
@@ -33,6 +39,10 @@ export default (props: any) => {
         dispatch(setIssues([]))
     }
 
+    const createIssue = () => {
+        dispatch(setCreateIssue(true))
+    }
+
     const issueDoubleClick = (issue: Issue) => {
         dispatch(setIssueToEdit(issue))
     }
@@ -40,7 +50,7 @@ export default (props: any) => {
     const dragEnd = (result: DropResult) => {
         const { draggableId, source, destination } = result
         if (destination) {
-            dispatch(moveIssue(idForBoard, +draggableId, source, destination))
+            dispatch(moveIssue(projectId, +draggableId, source, destination))
         }
     }
 
@@ -60,7 +70,14 @@ export default (props: any) => {
     return (
         <Page>
             <div className='padding-15'>
-                <a href='#' onClick={backToProjects}>Back to projects</a>
+                <h1 style={{ textAlign: 'center' }}>{project?.name}</h1>
+                <h5 style={{ textAlign: 'center' }}>{project?.description}</h5>
+                <div>
+                    <Button appearance='link' onClick={backToProjects}>Back to projects</Button>
+                </div>
+                <div>
+                    <Button appearance='link' onClick={createIssue}>Create issue</Button>
+                </div>
                 <DragDropContext onDragEnd={dragEnd}>
 
                     <div className='board-pane'>
@@ -118,6 +135,7 @@ export default (props: any) => {
             </div>
             <EditIssueModal></EditIssueModal>
             <DeleteIssueModal></DeleteIssueModal>
+            <CreateIssueModal></CreateIssueModal>
         </Page>
     )
 }

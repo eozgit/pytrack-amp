@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { DraggableLocation } from 'react-beautiful-dnd'
 import { AppThunk } from './store'
 import Project from '../model/Project'
-import { getProjects, postProject, deleteProject, patchProject, getIssues, patchIssue, deleteIssue } from '../api/client'
+import { getProjects, postProject, deleteProject, patchProject, getIssues, patchIssue, deleteIssue, postIssue } from '../api/client'
 import Issue, { IssueWithProperties } from '../model/Issue'
 import setIndices from './setIndices'
 
@@ -14,11 +14,12 @@ interface StateShape {
     issues: Issue[],
     issue: Issue | null,
     issueToDelete: Issue | null,
+    createIssue: boolean
 }
 
 const initialState: StateShape = {
     list: [], idToDelete: -1, idToEdit: -1, idForBoard: -1,
-    issues: [], issue: null, issueToDelete: null
+    issues: [], issue: null, issueToDelete: null, createIssue: false
 }
 
 const projectsSlice = createSlice({
@@ -50,12 +51,15 @@ const projectsSlice = createSlice({
         },
         setIssueToDelete(state, action: PayloadAction<Issue | null>) {
             state.issueToDelete = action.payload
+        },
+        setCreateIssue(state, action: PayloadAction<boolean>) {
+            state.createIssue = action.payload
         }
     }
 })
 
 export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard,
-    setIssues, setIssueIndices, setIssueToEdit, setIssueToDelete } = projectsSlice.actions
+    setIssues, setIssueIndices, setIssueToEdit, setIssueToDelete, setCreateIssue } = projectsSlice.actions
 
 export default projectsSlice.reducer
 
@@ -107,6 +111,7 @@ export const refreshBoard = (projectId: number): AppThunk => async dispatch => {
     dispatch(loadIssues(projectId))
     dispatch(setIssueToEdit(null))
     dispatch(setIssueToDelete(null))
+    dispatch(setCreateIssue(false))
 }
 
 export const loadIssues = (id: number): AppThunk => async dispatch => {
@@ -145,6 +150,15 @@ export const updateIssue = (projectId: number, issueId: number,
 export const removeIssue = (projectId: number, issueId: number): AppThunk => async dispatch => {
     try {
         await deleteIssue(projectId, issueId)
+    } catch (err) {
+        console.error(err)
+    }
+    dispatch(refreshBoard(projectId))
+}
+
+export const createIssue = (projectId: number, issue: IssueWithProperties): AppThunk => async dispatch => {
+    try {
+        await postIssue(projectId, issue)
     } catch (err) {
         console.error(err)
     }

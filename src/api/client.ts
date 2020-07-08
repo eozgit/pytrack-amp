@@ -31,3 +31,5 @@ export const getIssues = (id: number) => fetch(`${root}/projects/${id}/issues`, 
 export const patchIssue = (projectId: number, issueId: number, issue: IssueWithPosition | IssueWithProperties) => fetch(`${root}/projects/${projectId}/issues/${issueId}`, { ...getRequestInit(), method: 'PATCH', body: JSON.stringify(issue) })
 
 export const deleteIssue = (projectId: number, issueId: number) => fetch(`${root}/projects/${projectId}/issues/${issueId}`, { ...getRequestInit(), method: 'DELETE' })
+
+export const postIssue = (projectId: number, issue: IssueWithProperties) => fetch(`${root}/projects/${projectId}/issues`, { ...getRequestInit(), method: 'POST', body: JSON.stringify(issue) })

@@ -6,54 +6,25 @@ import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
 import Select, { ValueType, OptionType } from '@atlaskit/select';
 import { RootState } from '../state/rootReducer';
-import { setIssueToEdit, updateIssue, setIssueToDelete } from '../state/projectsSlice';
+import { createIssue, setCreateIssue } from '../state/projectsSlice';
 import ContainerProps from '../shared/ContainerProps';
 import EditModalFooter from './EditModalFooter';
 import IssueTypeOptions from './form/IssueTypeOptions';
 import StorypointOptions from './form/StorypointOptions';
 import PriorityOptions from './form/PriorityOptions';
-import Issue, { IssueWithProperties } from '../model/Issue';
+import { IssueWithProperties } from '../model/Issue';
 
 const projectIdSelector = (state: RootState) => state.projects.idForBoard
-const issueSelector = (state: RootState) => state.projects.issue
+const createIssueSelector = (state: RootState) => state.projects.createIssue
 
 export default (props: any) => {
 
     const projectId = useSelector(projectIdSelector)
-    const issue = useSelector(issueSelector)
+    const showCreateIssue = useSelector(createIssueSelector)
 
     const dispatch = useDispatch()
 
-    const cancelEdit = () => dispatch(setIssueToEdit(null))
-
-    const deleteIssue = (issue: Issue) => {
-        cancelEdit()
-        dispatch(setIssueToDelete(issue))
-    }
-
-    const getIssueType = (type: number | undefined) => {
-        if (!type) {
-            type = 0
-        }
-
-        return IssueTypeOptions.find(o => o.value === type)
-    }
-
-    const getStorypoints = (points: number | undefined) => {
-        if (!points) {
-            points = 1
-        }
-
-        return StorypointOptions.find(o => o.value === points)
-    }
-
-    const getPriority = (priority: number | undefined) => {
-        if (!priority) {
-            priority = 0
-        }
-
-        return PriorityOptions.find(o => o.value === priority)
-    }
+    const cancelCreate = () => dispatch(setCreateIssue(false))
 
     const validateTitle = (value?: string) => {
         if (!value) return 'REQUIRED'
@@ -68,22 +39,20 @@ export default (props: any) => {
     }
 
     const onFormSubmit = (data: any) => {
-        if (issue) {
-            const { title, description,
-                type: { value: type },
-                storypoints: { value: storypoints },
-                priority: { value: priority }
-            } = data
-            const patch: IssueWithProperties = { title, description, type, storypoints, priority }
-            dispatch(updateIssue(projectId, issue.id, patch))
-        }
+        const { title, description,
+            type: { value: type },
+            storypoints: { value: storypoints },
+            priority: { value: priority }
+        } = data
+        const issue: IssueWithProperties = { title, description, type, storypoints, priority }
+        dispatch(createIssue(projectId, issue))
     }
 
     return (<ModalTransition>
-        {issue && (
+        {showCreateIssue && (
             <ModalDialog
-                heading="Edit issue"
-                onClose={cancelEdit}
+                heading="Create issue"
+                onClose={cancelCreate}
                 components={{
                     Container: ({ children, className }: ContainerProps) => (
                         <Form onSubmit={onFormSubmit}>
@@ -94,10 +63,10 @@ export default (props: any) => {
                             )}
                         </Form>
                     ),
-                    Footer: () => <EditModalFooter submitText='Update' onCancel={cancelEdit} onDelete={() => deleteIssue(issue)}></EditModalFooter>,
+                    Footer: () => <EditModalFooter submitText='Create' onCancel={cancelCreate}></EditModalFooter>,
                 }}
             >
-                <Field name="title" defaultValue={issue.title} label="Title" isRequired validate={validateTitle}>
+                <Field name="title" defaultValue='' label="Title" isRequired validate={validateTitle}>
                     {({ fieldProps, error }) => <Fragment>
                         <TextField {...fieldProps} />
                         {error === 'TOO_LONG' && (
@@ -110,7 +79,7 @@ export default (props: any) => {
 
                 <Field<string, HTMLTextAreaElement>
                     name="description"
-                    defaultValue={issue.description}
+                    defaultValue=''
                     label="Description"
                     validate={validateDescription}
                 >
@@ -126,7 +95,7 @@ export default (props: any) => {
 
                 <Field<ValueType<OptionType>>
                     name="type"
-                    defaultValue={getIssueType(issue.type)}
+                    defaultValue={IssueTypeOptions[0]}
                     label="Type"
                 >
                     {({ fieldProps: { id, ...rest }, error }) => <Fragment>
@@ -143,7 +112,7 @@ export default (props: any) => {
 
                 <Field<ValueType<OptionType>>
                     name="storypoints"
-                    defaultValue={getStorypoints(issue.storypoints)}
+                    defaultValue={StorypointOptions[0]}
                     label="Storypoints"
                 >
                     {({ fieldProps: { id, ...rest }, error }) => <Fragment>
@@ -160,7 +129,7 @@ export default (props: any) => {
 
                 <Field<ValueType<OptionType>>
                     name="priority"
-                    defaultValue={getPriority(issue.priority)}
+                    defaultValue={PriorityOptions[2]}
                     label="Priority"
                 >
                     {({ fieldProps: { id, ...rest }, error }) => <Fragment>

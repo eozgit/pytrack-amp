@@ -10,11 +10,12 @@ import { updateProject, setIdToEdit } from '../state/projectsSlice'
 import ContainerProps from '../shared/ContainerProps';
 import EditModalFooter from './EditModalFooter';
 
+const projectsSelector = (state: RootState) => state.projects.list
+const idToEditSelector = (state: RootState) => state.projects.idToEdit
+const projectToEditSelector = createSelector([projectsSelector, idToEditSelector], (projects, id) => projects.find(p => p.id === id))
+
 export default (props: any) => {
 
-    const projectsSelector = (state: RootState) => state.projects.list
-    const idToEditSelector = (state: RootState) => state.projects.idToEdit
-    const projectToEditSelector = createSelector([projectsSelector, idToEditSelector], (projects, id) => projects.find(p => p.id === id))
 
     const projectToEdit = useSelector(projectToEditSelector)
 
@@ -55,7 +56,7 @@ export default (props: any) => {
                             )}
                         </Form>
                     ),
-                    Footer: () => <EditModalFooter onCancel={cancelEdit}></EditModalFooter>,
+                    Footer: () => <EditModalFooter submitText='Update' onCancel={cancelEdit}></EditModalFooter>,
                 }}
             >
                 <Field name="name" defaultValue={projectToEdit.name} label="Name" isRequired validate={validateName}>

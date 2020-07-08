@@ -10,9 +10,9 @@ import CreateProject from './CreateProject';
 import DeleteProjectModal from './DeleteProjectModal';
 import EditProjectModal from './EditProjectModal';
 
-export default (props: any) => {
+const projectsSelector = (state: RootState) => state.projects.list
 
-    const projectsSelector = (state: RootState) => state.projects.list
+export default (props: any) => {
 
     const projects = useSelector(projectsSelector)
 

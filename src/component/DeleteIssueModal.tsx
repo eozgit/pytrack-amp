@@ -9,7 +9,6 @@ const issueToDeleteSelector = (state: RootState) => state.projects.issueToDelete
 
 export default (props: any) => {
 
-
     const projectId = useSelector(projectIdSelector)
     const issueToDelete = useSelector(issueToDeleteSelector)
 

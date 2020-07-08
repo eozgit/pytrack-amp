@@ -8,7 +8,7 @@ const EditModalFooter = (props: any) => (
     <ModalFooter>
         <span></span>
         <ButtonGroup>
-            <Button appearance="primary" type="submit">Update</Button>
+            <Button appearance="primary" type="submit">{props.submitText}</Button>
             {props.onDelete && <Button appearance="danger" onClick={props.onDelete}>Delete</Button>}
             <Button onClick={props.onCancel}>Cancel</Button>
         </ButtonGroup>
@@ -16,6 +16,7 @@ const EditModalFooter = (props: any) => (
 );
 
 EditModalFooter.propTypes = {
+    submitText: PropTypes.string,
     onCancel: PropTypes.func,
     onDelete: PropTypes.func,
 }
