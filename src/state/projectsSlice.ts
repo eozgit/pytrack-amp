@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { DraggableLocation } from 'react-beautiful-dnd'
 import { AppThunk } from './store'
 import Project from '../model/Project'
 import { getProjects, postProject, deleteProject, patchProject, getIssues, patchIssue } from '../api/client'
-import Issue from '../model/Issue'
-import { DraggableLocation } from 'react-beautiful-dnd'
+import Issue, { IssueWithProperties } from '../model/Issue'
 import setIndices from './setIndices'
 
 interface StateShape {
@@ -95,6 +95,11 @@ export const updateProject = (id: number, project: Project): AppThunk => async d
     dispatch(resetPage())
 }
 
+export const refreshBoard = (projectId: number): AppThunk => async dispatch => {
+    dispatch(loadIssues(projectId))
+    dispatch(setIssueToEdit(null))
+}
+
 export const loadIssues = (id: number): AppThunk => async dispatch => {
     let issues: Issue[] = []
     try {
@@ -115,15 +120,15 @@ export const moveIssue = (projectId: number, issueId: number,
         } catch (err) {
             console.error(err)
         }
-        dispatch(loadIssues(projectId))
+        dispatch(refreshBoard(projectId))
     }
 
 export const updateIssue = (projectId: number, issueId: number,
-    patch: Issue): AppThunk => async dispatch => {
+    patch: IssueWithProperties): AppThunk => async dispatch => {
         try {
             await patchIssue(projectId, issueId, patch)
         } catch (err) {
             console.error(err)
         }
-        dispatch(loadIssues(projectId))
+        dispatch(refreshBoard(projectId))
     }

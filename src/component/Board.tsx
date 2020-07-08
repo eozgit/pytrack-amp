@@ -12,7 +12,7 @@ import PriorityHighIcon from '@atlaskit/icon-priority/glyph/priority-high';
 import PriorityHighestIcon from '@atlaskit/icon-priority/glyph/priority-highest';
 import { RootState } from '../state/rootReducer';
 import { moveIssue, setIdForBoard, setIssues, setIssueToEdit } from '../state/projectsSlice';
-import Issue from '../model/Issue';
+import Issue, { IssueWithPosition } from '../model/Issue';
 import Page from '@atlaskit/page';
 import EditIssueModal from './EditIssueModal';
 
@@ -43,7 +43,7 @@ export default (props: any) => {
         }
     }
 
-    const issueComparer = (issueA: Issue, issueB: Issue) => {
+    const issueComparer = (issueA: IssueWithPosition, issueB: IssueWithPosition) => {
         const { index: indexA } = issueA
         const { index: indexB } = issueB
         if (indexA > indexB) {
@@ -65,7 +65,7 @@ export default (props: any) => {
                     <div className='board-pane'>
                         {columns.map((column, columnIndex) => {
 
-                            let columnIssues = issues.filter(issue => issue.status === columnIndex)
+                            const columnIssues = issues.filter(issue => issue.status === columnIndex)
                             columnIssues.sort(issueComparer)
 
                             return (<Droppable droppableId={columnIndex.toString()} key={columnIndex}>

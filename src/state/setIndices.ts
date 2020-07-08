@@ -1,7 +1,7 @@
 import { DraggableLocation } from "react-beautiful-dnd"
-import Issue from "../model/Issue"
+import { IssueWithPosition } from "../model/Issue"
 
-export default (issues: Issue[], source: DraggableLocation, destination: DraggableLocation) => {
+export default (issues: IssueWithPosition[], source: DraggableLocation, destination: DraggableLocation) => {
     if (!destination) return
     if (source.droppableId === destination.droppableId) {
         if (source.index === destination.index) return

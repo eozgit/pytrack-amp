@@ -1,5 +1,5 @@
 import Project from '../model/Project';
-import Issue from '../model/Issue';
+import { IssueWithPosition, IssueWithProperties } from '../model/Issue';
 
 const root = process.env.NODE_ENV === 'development' ? ' http://localhost:5000' : '/pytrack-stage/api'
 
@@ -28,4 +28,4 @@ export const patchProject = (id: number, project: Project) => fetch(`${root}/pro
 
 export const getIssues = (id: number) => fetch(`${root}/projects/${id}/issues`, getRequestInit())
 
-export const patchIssue = (projectId: number, issueId: number, issue: Issue) => fetch(`${root}/projects/${projectId}/issues/${issueId}`, { ...getRequestInit(), method: 'PATCH', body: JSON.stringify(issue) })
+export const patchIssue = (projectId: number, issueId: number, issue: IssueWithPosition | IssueWithProperties) => fetch(`${root}/projects/${projectId}/issues/${issueId}`, { ...getRequestInit(), method: 'PATCH', body: JSON.stringify(issue) })

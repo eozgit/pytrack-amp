@@ -1,11 +1,15 @@
-export default interface Issue {
+export interface IssueWithPosition {
     id: number;
-    title?: string;
-    description?: string;
-    type?: number;
-    assignee?: string;
-    storypoints?: number;
     status: number;
-    priority?: number;
     index: number;
 }
+
+export interface IssueWithProperties {
+    title: string;
+    description: string;
+    type: number;
+    storypoints: number;
+    priority: number;
+}
+
+export default interface Issue extends IssueWithPosition, IssueWithProperties { }

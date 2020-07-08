@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit';
-import ModalDialog, { ModalFooter, ModalTransition } from '@atlaskit/modal-dialog';
+import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
 import Form, { Field, ErrorMessage } from '@atlaskit/form';
-import Button, { ButtonGroup } from '@atlaskit/button';
 import TextField from '@atlaskit/textfield';
 import TextArea from '@atlaskit/textarea';
 import { RootState } from '../state/rootReducer'

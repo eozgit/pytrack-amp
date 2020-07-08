@@ -9,11 +9,10 @@ import { RootState } from '../state/rootReducer';
 import { setIssueToEdit, updateIssue } from '../state/projectsSlice';
 import ContainerProps from '../shared/ContainerProps';
 import EditModalFooter from './EditModalFooter';
-import IssueTypeOptions, { IssueTypeMap } from './form/IssueTypeOptions';
+import IssueTypeOptions from './form/IssueTypeOptions';
 import StorypointOptions from './form/StorypointOptions';
-import StatusOptions from './form/StatusOptions';
 import PriorityOptions from './form/PriorityOptions';
-import Issue from '../model/Issue';
+import { IssueWithProperties } from '../model/Issue';
 
 const projectIdSelector = (state: RootState) => state.projects.idForBoard
 const issueSelector = (state: RootState) => state.projects.issue
@@ -43,14 +42,6 @@ export default (props: any) => {
         return StorypointOptions.find(o => o.value === points)
     }
 
-    const getStatus = (status: number | undefined) => {
-        if (!status) {
-            status = 0
-        }
-
-        return StatusOptions.find(o => o.value === status)
-    }
-
     const getPriority = (priority: number | undefined) => {
         if (!priority) {
             priority = 0
@@ -72,15 +63,14 @@ export default (props: any) => {
     }
 
     const onFormSubmit = (data: any) => {
-        console.log(data)
         if (issue) {
             const { title, description,
                 type: { value: type },
                 storypoints: { value: storypoints },
                 priority: { value: priority }
             } = data
-            // const patch: Issue = { id: issue.id, title, description, type, storypoints, priority }
-            // dispatch(updateIssue(projectId, issue.id, patch))
+            const patch: IssueWithProperties = { title, description, type, storypoints, priority }
+            dispatch(updateIssue(projectId, issue.id, patch))
         }
     }
 
