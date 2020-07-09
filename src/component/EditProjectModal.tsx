@@ -1,21 +1,10 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { createSelector } from '@reduxjs/toolkit';
-import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
-import Form, { Field, ErrorMessage } from '@atlaskit/form';
-import TextField from '@atlaskit/textfield';
-import TextArea from '@atlaskit/textarea';
-import { RootState } from '../state/rootReducer'
-import { updateProject, setIdToEdit } from '../state/projectsSlice'
-import ContainerProps from '../shared/ContainerProps';
+import { updateProject, setIdToEdit, projectToEditSelector } from '../state/projectsSlice'
 import EditModalFooter from './EditModalFooter';
-
-const projectsSelector = (state: RootState) => state.projects.list
-const idToEditSelector = (state: RootState) => state.projects.idToEdit
-const projectToEditSelector = createSelector([projectsSelector, idToEditSelector], (projects, id) => projects.find(p => p.id === id))
+import { ModalTransition, ModalDialog, Form, Field, TextField, ErrorMessage, TextArea } from './atlas';
 
 export default (props: any) => {
-
 
     const projectToEdit = useSelector(projectToEditSelector)
 
@@ -47,7 +36,7 @@ export default (props: any) => {
                 heading="Edit project"
                 onClose={cancelEdit}
                 components={{
-                    Container: ({ children, className }: ContainerProps) => (
+                    Container: ({ children, className }) => (
                         <Form onSubmit={onFormSubmit}>
                             {({ formProps }) => (
                                 <form {...formProps} className={className}>

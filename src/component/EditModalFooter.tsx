@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { ModalFooter } from "@atlaskit/modal-dialog";
-import { ButtonGroup } from "@atlaskit/button";
-import { Button } from "@atlaskit/button/dist/cjs/components/Button";
+import { ModalFooter, Button, ButtonGroup } from "./atlas";
 
 const EditModalFooter = (props: any) => (
     <ModalFooter>

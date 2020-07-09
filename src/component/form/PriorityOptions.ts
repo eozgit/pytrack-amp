@@ -1,4 +1,4 @@
-export const PriorityMap: { [value: number]: string; } = {
+const PriorityMap: { [value: number]: string; } = {
     0: 'Lowest',
     1: 'Low',
     2: 'Medium',

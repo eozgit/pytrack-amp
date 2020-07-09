@@ -1,26 +1,16 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
-import Form, { Field, ErrorMessage } from '@atlaskit/form';
-import TextField from '@atlaskit/textfield';
-import TextArea from '@atlaskit/textarea';
-import Select, { ValueType, OptionType } from '@atlaskit/select';
-import { RootState } from '../state/rootReducer';
-import { createIssue, setCreateIssue } from '../state/projectsSlice';
-import ContainerProps from '../shared/ContainerProps';
+import { createIssue, setCreateIssue, activeProjectIdSelector, createIssueModalOpenSelector } from '../state/projectsSlice';
 import EditModalFooter from './EditModalFooter';
-import IssueTypeOptions from './form/IssueTypeOptions';
-import StorypointOptions from './form/StorypointOptions';
-import PriorityOptions from './form/PriorityOptions';
 import { IssueWithProperties } from '../model/Issue';
-
-const projectIdSelector = (state: RootState) => state.projects.idForBoard
-const createIssueSelector = (state: RootState) => state.projects.createIssue
+import { ModalTransition, ModalDialog, Form, Field, TextField, ErrorMessage, TextArea, Select } from './atlas';
+import { OptionType, ValueType } from '@atlaskit/select';
+import { IssueTypeOptions, StorypointOptions, PriorityOptions } from './form';
 
 export default (props: any) => {
 
-    const projectId = useSelector(projectIdSelector)
-    const showCreateIssue = useSelector(createIssueSelector)
+    const projectId = useSelector(activeProjectIdSelector)
+    const showCreateIssue = useSelector(createIssueModalOpenSelector)
 
     const dispatch = useDispatch()
 
@@ -54,7 +44,7 @@ export default (props: any) => {
                 heading="Create issue"
                 onClose={cancelCreate}
                 components={{
-                    Container: ({ children, className }: ContainerProps) => (
+                    Container: ({ children, className }) => (
                         <Form onSubmit={onFormSubmit}>
                             {({ formProps }) => (
                                 <form {...formProps} className={className}>

@@ -1,13 +1,8 @@
 import React, { Fragment } from 'react';
-
-import Button from '@atlaskit/button';
-import TextField from '@atlaskit/textfield';
-import TextArea from '@atlaskit/textarea';
-
-import Form, { Field, FormFooter, ErrorMessage } from '@atlaskit/form';
 import { useDispatch } from 'react-redux';
 import { createProject } from '../state/projectsSlice';
 import Project from '../model/Project';
+import { Form, Field, TextField, ErrorMessage, TextArea, FormFooter, Button } from './atlas';
 
 export default (props: any) => {
 

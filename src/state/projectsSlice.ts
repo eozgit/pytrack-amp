@@ -1,10 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit'
 import { DraggableLocation } from 'react-beautiful-dnd'
 import { AppThunk } from './store'
 import Project from '../model/Project'
 import { getProjects, postProject, deleteProject, patchProject, getIssues, patchIssue, deleteIssue, postIssue } from '../api/client'
 import Issue, { IssueWithProperties } from '../model/Issue'
 import setIndices from './setIndices'
+import { RootState } from './rootReducer'
 
 interface StateShape {
     list: Project[],
@@ -62,6 +63,30 @@ export const { setProjects, setIdToDelete, setIdToEdit, setIdForBoard,
     setIssues, setIssueIndices, setIssueToEdit, setIssueToDelete, setCreateIssue } = projectsSlice.actions
 
 export default projectsSlice.reducer
+
+
+export const projectsSelector = (state: RootState) => state.projects.list
+
+export const activeProjectIdSelector = (state: RootState) => state.projects.idForBoard
+
+const projectToEditIdSelector = (state: RootState) => state.projects.idToEdit
+
+export const projectToEditSelector = createSelector([projectsSelector, projectToEditIdSelector], (projects, id) => projects.find(p => p.id === id))
+
+const projectToDeleteIdSelector = (state: RootState) => state.projects.idToDelete
+
+export const projectToDeleteSelector = createSelector([projectsSelector, projectToDeleteIdSelector], (projects, id) => projects.find(p => p.id === id))
+
+export const projectSelector = createSelector([projectsSelector, activeProjectIdSelector], (projects, id) => projects.find(p => p.id === id))
+
+export const issuesSelector = (state: RootState) => state.projects.issues
+
+export const createIssueModalOpenSelector = (state: RootState) => state.projects.createIssue
+
+export const issueToEditSelector = (state: RootState) => state.projects.issue
+
+export const issueToDeleteSelector = (state: RootState) => state.projects.issueToDelete
+
 
 export const resetPage = (): AppThunk => async dispatch => {
     dispatch(loadProjects())

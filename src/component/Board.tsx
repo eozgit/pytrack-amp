@@ -1,34 +1,16 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
-import Badge from '@atlaskit/badge';
-import Button from '@atlaskit/button';
-import Task16Icon from '@atlaskit/icon-object/glyph/task/16';
-import Bug16Icon from '@atlaskit/icon-object/glyph/bug/16';
-import Story16Icon from '@atlaskit/icon-object/glyph/story/16';
-import PriorityLowestIcon from '@atlaskit/icon-priority/glyph/priority-lowest';
-import PriorityLowIcon from '@atlaskit/icon-priority/glyph/priority-low';
-import PriorityMediumIcon from '@atlaskit/icon-priority/glyph/priority-medium';
-import PriorityHighIcon from '@atlaskit/icon-priority/glyph/priority-high';
-import PriorityHighestIcon from '@atlaskit/icon-priority/glyph/priority-highest';
-import { RootState } from '../state/rootReducer';
-import { moveIssue, setIdForBoard, setIssues, setIssueToEdit, setCreateIssue } from '../state/projectsSlice';
+import { moveIssue, setIdForBoard, setIssues, setIssueToEdit, setCreateIssue, activeProjectIdSelector, projectSelector, issuesSelector } from '../state/projectsSlice';
 import Issue, { IssueWithPosition } from '../model/Issue';
-import Page from '@atlaskit/page';
 import EditIssueModal from './EditIssueModal';
 import DeleteIssueModal from './DeleteIssueModal';
 import CreateIssueModal from './CreateIssueModal';
-
-
-const idForBoardSelector = (state: RootState) => state.projects.idForBoard
-const projectsSelector = (state: RootState) => state.projects.list
-const issuesSelector = (state: RootState) => state.projects.issues
-const projectSelector = createSelector([projectsSelector, idForBoardSelector], (projects, id) => projects.find(p => p.id === id))
+import { Page, Button, Task16Icon, Bug16Icon, Story16Icon, PriorityLowestIcon, PriorityLowIcon, PriorityMediumIcon, PriorityHighIcon, PriorityHighestIcon, Badge } from './atlas';
 
 export default (props: any) => {
 
-    const projectId = useSelector(idForBoardSelector)
+    const projectId = useSelector(activeProjectIdSelector)
     const project = useSelector(projectSelector)
     const issues = useSelector(issuesSelector)
 

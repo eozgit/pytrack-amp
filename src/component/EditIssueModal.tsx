@@ -1,26 +1,16 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ModalDialog, { ModalTransition } from '@atlaskit/modal-dialog';
-import Form, { Field, ErrorMessage } from '@atlaskit/form';
-import TextField from '@atlaskit/textfield';
-import TextArea from '@atlaskit/textarea';
-import Select, { ValueType, OptionType } from '@atlaskit/select';
-import { RootState } from '../state/rootReducer';
-import { setIssueToEdit, updateIssue, setIssueToDelete } from '../state/projectsSlice';
-import ContainerProps from '../shared/ContainerProps';
+import { setIssueToEdit, updateIssue, setIssueToDelete, activeProjectIdSelector, issueToEditSelector } from '../state/projectsSlice';
 import EditModalFooter from './EditModalFooter';
-import IssueTypeOptions from './form/IssueTypeOptions';
-import StorypointOptions from './form/StorypointOptions';
-import PriorityOptions from './form/PriorityOptions';
 import Issue, { IssueWithProperties } from '../model/Issue';
-
-const projectIdSelector = (state: RootState) => state.projects.idForBoard
-const issueSelector = (state: RootState) => state.projects.issue
+import { ModalTransition, ModalDialog, Form, Field, TextField, ErrorMessage, TextArea, Select } from './atlas';
+import { OptionType, ValueType } from '@atlaskit/select';
+import { IssueTypeOptions, StorypointOptions, PriorityOptions } from './form';
 
 export default (props: any) => {
 
-    const projectId = useSelector(projectIdSelector)
-    const issue = useSelector(issueSelector)
+    const projectId = useSelector(activeProjectIdSelector)
+    const issue = useSelector(issueToEditSelector)
 
     const dispatch = useDispatch()
 
@@ -85,7 +75,7 @@ export default (props: any) => {
                 heading="Edit issue"
                 onClose={cancelEdit}
                 components={{
-                    Container: ({ children, className }: ContainerProps) => (
+                    Container: ({ children, className }) => (
                         <Form onSubmit={onFormSubmit}>
                             {({ formProps }) => (
                                 <form {...formProps} className={className}>

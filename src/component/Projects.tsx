@@ -1,16 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import Page, { Grid, GridColumn } from '@atlaskit/page';
-import TrashIcon from '@atlaskit/icon/glyph/trash';
-import EditFilledIcon from '@atlaskit/icon/glyph/edit-filled';
-import BoardIcon from '@atlaskit/icon/glyph/board';
-import { resetPage, setIdToDelete, setIdToEdit, loadIssues } from '../state/projectsSlice'
-import { RootState } from '../state/rootReducer'
+import { resetPage, setIdToDelete, setIdToEdit, loadIssues, projectsSelector } from '../state/projectsSlice'
 import CreateProject from './CreateProject';
 import DeleteProjectModal from './DeleteProjectModal';
 import EditProjectModal from './EditProjectModal';
-
-const projectsSelector = (state: RootState) => state.projects.list
+import { Page, Grid, Spinner, GridColumn, TrashIcon, EditFilledIcon, BoardIcon } from './atlas';
 
 export default (props: any) => {
 
@@ -28,45 +22,50 @@ export default (props: any) => {
 
     return (
         <Page>
-            <Grid>
-                <GridColumn>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th className='icon-column'>Delete</th>
-                                <th className='icon-column'>Edit</th>
-                                <th className='icon-column'>Board</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {projects.map(project => (
-                                <tr key={project.id} className='projects-table'>
-                                    <td>{project.name}</td>
-                                    <td>{project.description}</td>
-                                    <td className='icon-column'>
-                                        <div className='opacity-10' onClick={e => dispatch(setIdToDelete(project.id))}>
-                                            <TrashIcon size='medium' label='' />
-                                        </div>
-                                    </td>
-                                    <td className='icon-column'>
-                                        <div className='opacity-10' onClick={e => dispatch(setIdToEdit(project.id))}>
-                                            <EditFilledIcon size='medium' label='' />
-                                        </div>
-                                    </td>
-                                    <td className='icon-column'>
-                                        <div className='opacity-10' onClick={e => goToBoard(project.id)}>
-                                            <BoardIcon size='medium' label='' />
-                                        </div>
-                                    </td>
+            {!projects.length && <div className='center-container'>
+                <div className='center-element'><Spinner size='xlarge' /></div>
+            </div>}
+            {projects.length && <div>
+                <Grid>
+                    <GridColumn>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th className='icon-column'>Delete</th>
+                                    <th className='icon-column'>Edit</th>
+                                    <th className='icon-column'>Board</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </GridColumn>
-            </Grid>
-            <CreateProject></CreateProject>
+                            </thead>
+                            <tbody>
+                                {projects.map(project => (
+                                    <tr key={project.id} className='projects-table'>
+                                        <td>{project.name}</td>
+                                        <td>{project.description}</td>
+                                        <td className='icon-column'>
+                                            <div className='opacity-10' onClick={e => dispatch(setIdToDelete(project.id))}>
+                                                <TrashIcon size='medium' label='' />
+                                            </div>
+                                        </td>
+                                        <td className='icon-column'>
+                                            <div className='opacity-10' onClick={e => dispatch(setIdToEdit(project.id))}>
+                                                <EditFilledIcon size='medium' label='' />
+                                            </div>
+                                        </td>
+                                        <td className='icon-column'>
+                                            <div className='opacity-10' onClick={e => goToBoard(project.id)}>
+                                                <BoardIcon size='medium' label='' />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </GridColumn>
+                </Grid>
+                <CreateProject></CreateProject>
+            </div>}
             <DeleteProjectModal></DeleteProjectModal>
             <EditProjectModal></EditProjectModal>
         </Page>

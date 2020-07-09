@@ -1,15 +1,11 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
-import { RootState } from '../state/rootReducer'
-import { setIssueToDelete, removeIssue } from '../state/projectsSlice'
-
-const projectIdSelector = (state: RootState) => state.projects.idForBoard
-const issueToDeleteSelector = (state: RootState) => state.projects.issueToDelete
+import { setIssueToDelete, removeIssue, issueToDeleteSelector, activeProjectIdSelector } from '../state/projectsSlice'
+import { ModalTransition, ModalDialog } from './atlas';
 
 export default (props: any) => {
 
-    const projectId = useSelector(projectIdSelector)
+    const projectId = useSelector(activeProjectIdSelector)
     const issueToDelete = useSelector(issueToDeleteSelector)
 
     const dispatch = useDispatch()
@@ -34,7 +30,7 @@ export default (props: any) => {
 
     return (<ModalTransition>
         {issueToDelete && (
-            <Modal
+            <ModalDialog
                 actions={actions}
                 appearance="danger"
                 onClose={cancelDelete}
@@ -42,7 +38,7 @@ export default (props: any) => {
             >
                 <h4>{issueToDelete.title}</h4>
             will be deleted.
-            </Modal>
+            </ModalDialog>
         )}
     </ModalTransition>)
 }

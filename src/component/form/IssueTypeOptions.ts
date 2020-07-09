@@ -1,4 +1,4 @@
-export const IssueTypeMap: { [value: number]: string; } = {
+const IssueTypeMap: { [value: number]: string; } = {
     0: 'Task',
     1: 'Bug',
     2: 'Story'
